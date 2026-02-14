@@ -116,43 +116,48 @@ let step = 0;
 const questions = [
     "Do you forgive me for forgetting your birthday in Ladakh?",
     "Do you forgive me for forgetting your birthday that one time on Facetime?",
-    "Do you know how much I love you?"
+    "Do you know what I'm gonna do to make it up to you?"
 ];
 
-function next() {
-    const card = document.getElementById("card");
+function showQuestion() {
     const question = document.getElementById("question");
     const buttons = document.getElementById("buttons");
 
-    card.classList.add("fade-out");
+    question.innerText = questions[step];
 
-    setTimeout(() => {
-        step++;
+    // Scale grows each question
+    const scaleAmount = 1 + (step * 0.4);
 
-        if (step === 1) {
-            question.innerText = questions[1];
-        }
+    buttons.innerHTML = `
+        <button id="yesBtn" onclick="next()" 
+            style="transform: scale(${scaleAmount}); transition: transform 0.3s ease;">
+            Yes ❤️
+        </button>
+        <button id="noBtn">No 😢</button>
+    `;
 
-        else if (step === 2) {
-            question.innerText = questions[2];
-            buttons.innerHTML = `
-                <button onclick="startLetter()">Yes ❤️</button>
-                <button id="noBtn">No 😢</button>
-            `;
-            setTimeout(setupNoButton, 50);
-        }
+    setupNoButton();
+}
 
-        card.classList.remove("fade-out");
-    }, 500);
+function next() {
+    step++;
+
+    if (step < questions.length) {
+        showQuestion();
+    } else {
+        startLetter();
+    }
 }
 
 /* Runaway No Button */
 function setupNoButton() {
     const noBtn = document.getElementById("noBtn");
 
+    noBtn.style.position = "relative";
+
     noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * 250 - 125;
-        const y = Math.random() * 150 - 75;
+        const x = Math.random() * 300 - 150;
+        const y = Math.random() * 200 - 100;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
     });
 }
@@ -166,17 +171,22 @@ function startLetter() {
     buttons.innerHTML = "<div class='letter' id='letter'></div>";
 
     const message = 
-`Every night I dream of you sleeping next to me,
-every day I hold my breath until the moment I first here from you.
+`Love is not a thing of reason, she thought. 
+It was tide and monsoon, glacier and fault line
+- an upheaval that altered the geography of the self. 
+It moved through her like weather, unbidden and immense, 
+carving valleys where there had been plains, 
+setting adrift the careful maps she had drawn of her own becoming.
+(Latitudes of Longing)
 
-I know we have a lifetime to spend together.
-I know how much we do to stay in each others' lives.
-But I can't help being impatient.
+My love,
+my jaan-e-mann,
+I will scale tallest glaciers
+and walk unflinching over fault lines,
+all to fold the map that divides us in half,
+and bring us together once more. 
 
-I miss you too much jaan-e-mann.
-See you in London.
-
-Happy Valentine's Day ❤️`;
+Happy Bijalentine's Dayalal ❤️`;
 
     typeWriter(message, 0);
 }
@@ -213,7 +223,10 @@ function createHeart() {
 }
 
 setInterval(createHeart, 300);
-</script>
 
+/* Initialize first question */
+showQuestion();
+</script>
+    
 </body>
 </html>
